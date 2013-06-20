@@ -1,19 +1,49 @@
 <!DOCTYPE html>
 <html lang="es">
 	<head>
-		<title>Calculador de Cuota</title><meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+		<title>Calculador de Cuota</title>
+		<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+		<link rel="stylesheet" href="css/pure-min.css" />
+		<style type="text/css">
+			form {
+				max-width:968px;
+				margin:auto!important;
+			}
+		</style>
 	</head>
 	<body>
-		<label for="d">Deuda total</label>
-		<input type="text" id="d" /><br />
-		<label for="c">Valor Cuota</label>
-		<input type="text" id="c" /> <br />
-		<label for="n">Cantidad de cuotas</label>
-		<input type="text" id="n" /><br />
-		<label for="i">Tasa de interes</label>
-		<input type="text" id="i" /><br />
-		<a id="calcular" href="#">Calcular</a>
-		<iframe id="frame" src="#" style="width:100%;height:500px;"></iframe>
+		<form class="pure-form pure-form-stacked">
+    		<fieldset>
+        		<legend>Calculador de cuotas</legend>
+				<div class="pure-g-r">
+					<div class="pure-u-1-5">
+						<label for="d">Deuda total</label>
+						<input type="text" id="d" />
+					</div>
+					<div class="pure-u-1-5">
+						<label for="c">Valor Cuota</label>
+						<input type="text" id="c" /> 
+					</div>
+
+					<div class="pure-u-1-5">
+						<label for="n">Cantidad de cuotas</label>
+						<input type="text" id="n" />
+					</div>
+
+					<div class="pure-u-1-5">
+						<label for="i">Tasa de interes</label>
+						<input type="text" id="i" value="0.0135" />
+					</div>
+					
+					<div class="pure-u-1-5">
+						<a id="calcular" href="#" class="pure-button notice">Calcular</a>
+					</div>
+				</div>
+				
+			</fieldset>
+		</form>
+		
+		<iframe id="frame" src="" style="width:100%;height:500px;"></iframe>
 	</body>
 	<script type="text/javascript">
 		(function() {
