@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<title>Calculador de Cuota</title><meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+	</head>
+	<body>
+		<label for="d">Deuda total</label>
+		<input type="text" id="d" /><br />
+		<label for="c">Valor Cuota</label>
+		<input type="text" id="c" /> <br />
+		<label for="n">Cantidad de cuotas</label>
+		<input type="text" id="n" /><br />
+		<label for="i">Tasa de interes</label>
+		<input type="text" id="i" /><br />
+		<a id="calcular" href="#">Calcular</a>
+		<iframe id="frame" src="#" style="width:100%;height:500px;"></iframe>
+	</body>
+	<script type="text/javascript">
+		(function() {
+			AddEvent(document.getElementById("calcular"), "click", function () {
+				var c, d, n, i;
+				c = document.getElementById('c').value;
+				d = document.getElementById('d').value;
+				n = document.getElementById('n').value;
+				i = document.getElementById('i').value;
+				var result = document.getElementById('frame');
+				//https://www.wolframalpha.com/input/?i=150+%3D+%285229.34+*+0.0135+*+%281+%2B+0.0135%29+^+n%29++%2F+%28+%28+%281+%2B+0.0135%29+^+n%29+-+1+%29
+				var go = "https://www.wolframalpha.com/input/?i=" + c +"+%3D+%28" + d + "+*+" + i + "+*+%281+%2B+" + i + "%29+^+" + n +"%29++%2F+%28+%28+%281+%2B+" + i + "%29+^+" + n +"%29+-+1+%29#answers";
+				result.src = go;
+			});
+		})();
+		function AddEvent(html_element, event_name, event_function) {       
+		   if(html_element.attachEvent) //Internet Explorer
+			  html_element.attachEvent("on" + event_name, function() {event_function.call(html_element);}); 
+		   else if(html_element.addEventListener) //Firefox & company
+			  html_element.addEventListener(event_name, event_function, false); //don't need the 'call' trick because in FF everything already works in the right way          
+		} 
+	</script>
+</html>
