@@ -9,6 +9,13 @@
 				max-width:968px;
 				margin:auto!important;
 			}
+			.pure-u-bottom {
+				vertical-align:bottom;
+			}
+			.error {
+				color: red;
+				font-weight:bold;
+			}
 		</style>
 	</head>
 	<body>
@@ -35,8 +42,10 @@
 						<input type="text" id="i" value="0.0135" />
 					</div>
 					
-					<div class="pure-u-1-5">
-						<a id="calcular" href="#" class="pure-button notice">Calcular</a>
+					<div class="pure-u-1-5 pure-u-bottom">
+						<a id="calcular" href="#" class="pure-button notice pure-button-primary">Calcular</a>
+					</div>
+					<div class="pure-u-1" id="info">
 					</div>
 				</div>
 				
@@ -47,18 +56,75 @@
 	</body>
 	<script type="text/javascript">
 		(function() {
-			AddEvent(document.getElementById("calcular"), "click", function () {
-				var c, d, n, i;
-				c = document.getElementById('c').value;
-				d = document.getElementById('d').value;
-				n = document.getElementById('n').value;
-				i = document.getElementById('i').value;
-				var result = document.getElementById('frame');
-				//https://www.wolframalpha.com/input/?i=150+%3D+%285229.34+*+0.0135+*+%281+%2B+0.0135%29+^+n%29++%2F+%28+%28+%281+%2B+0.0135%29+^+n%29+-+1+%29
-				var go = "https://www.wolframalpha.com/input/?i=" + c +"+%3D+%28" + d + "+*+" + i + "+*+%281+%2B+" + i + "%29+^+" + n +"%29++%2F+%28+%28+%281+%2B+" + i + "%29+^+" + n +"%29+-+1+%29#answers";
-				result.src = go;
-			});
+			var info = document.getElementById("info");
+			var ie = getIEVersion();
+			if(ie >= 9 || ie === -1) {
+				AddEvent(document.getElementById("calcular"), "click", function () {
+					var c, d, n, i;
+					info.innerHTML = "";
+					c = document.getElementById('c').value;
+					d = document.getElementById('d').value;
+					n = document.getElementById('n').value;
+					i = document.getElementById('i').value;
+					if(esValido(c) && esValido(d) && esValido(n) && esValido(i)) {
+						var cantLetras = 0;
+						if(esLetra(c)) {
+							cantLetras++;
+						}
+						if(esLetra(d)) {
+							cantLetras++;
+						}
+						if(esLetra(i)) {
+							cantLetras++;
+						}
+						if(esLetra(n)) {
+							cantLetras++;
+						}
+						if(cantLetras == 1) {
+							var result = document.getElementById('frame');
+							//https://www.wolframalpha.com/input/?i=150+%3D+%285229.34+*+0.0135+*+%281+%2B+0.0135%29+^+n%29++%2F+%28+%28+%281+%2B+0.0135%29+^+n%29+-+1+%29
+							var go = "https://www.wolframalpha.com/input/?i=" + c +"+%3D+%28" + d + "+*+" + i + "+*+%281+%2B+" + i + "%29+^+" + n +"%29++%2F+%28+%28+%281+%2B+" + i + "%29+^+" + n +"%29+-+1+%29#answers";
+							result.src = go;
+						} else {
+							if(cantLetras === 0) {
+								info.innerHTML = "<p class='error'>Debe definirse al menos una incognita.<p>";
+							} else {
+								info.innerHTML = "<p class='error'>Solo un valor puede definirse como incognita.<p>";
+							}
+						}
+					} else {
+						info.innerHTML = "<p class='error'>Algunos de los parámetros no es válido.<p>";
+					}
+				});
+			} else {
+				info.innerHTML = "<p class='error'>Su navegador no es soportado.<p>";
+			}
 		})();
+		
+		function getIEVersion() {
+			// Returns the version of Internet Explorer or a -1
+			// (indicating the use of another browser).
+			var rv = -1; // Return value assumes failure.
+			if (navigator.appName == 'Microsoft Internet Explorer') {
+				var ua = navigator.userAgent;
+				var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+				if (re.exec(ua) != null) {
+					rv = parseFloat( RegExp.$1 );
+				}
+			}
+			return rv;
+		}
+		function esLetra (valor) {
+			var rxEsLetra = new RegExp("^([a-zA-Z]?)$");
+			return rxEsLetra.test(valor);
+		}
+		function esNumero (valor) {
+			var rxEsNumero = new RegExp("^(\d+(\.\d+)?)$");
+			return rxEsNumero.test(valor);
+		}
+		function esValido (valor) {
+			return (esLetra(valor) || esNumero(valor));
+		}
 		function AddEvent(html_element, event_name, event_function) {       
 		   if(html_element.attachEvent) //Internet Explorer
 			  html_element.attachEvent("on" + event_name, function() {event_function.call(html_element);}); 
