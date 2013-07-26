@@ -1,0 +1,14 @@
+CACHE MANIFEST
+# 2013-07-25:v0.1
+
+CACHE:
+/favicon.ico
+index.html
+css/pure-min.css
+css/calculadora.js
+js/calculadora.js
+
+#NETWORK:
+
+#FALLBACK:
+#/main.py /static.html
