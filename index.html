@@ -4,25 +4,7 @@
 		<title>Calculador de Cuota</title>
 		<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
 		<link rel="stylesheet" href="css/pure-min.css" />
-		<style type="text/css">
-			form {
-				max-width:968px;
-				margin:auto!important;
-			}
-            .pure-form fieldset {
-                border-bottom: 1px solid #e5e5e5;
-            }
-			.pure-u-bottom {
-				vertical-align:bottom;
-			}
-			.error {
-				color: red;
-				font-weight:bold;
-			}
-            .cell-number {
-                text-align:right;
-            }
-		</style>
+		<link rel="stylesheet" href="css/calculadora.css" />
 	</head>
 	<body>
 		<form class="pure-form pure-form-stacked">
@@ -61,119 +43,6 @@
             </div>
 		</form>
 	</body>
-	<script type="text/javascript">
-		(function() {
-			var info = document.getElementById("info");
-            AddEvent(document.getElementById("calcular"), "click", function () {
-                var c, d, n, i;
-                info.innerHTML = "";
-                c = document.getElementById('c').value;
-                d = document.getElementById('d').value;
-                n = document.getElementById('n').value;
-                i = document.getElementById('i').value;
-                if(esValido(c) && esValido(d) && esValido(n) && esValido(i)) {
-                    var cantLetras = 0;
-                    if(esLetra(c)) {
-                        cantLetras++;
-                    }
-                    if(esLetra(d)) {
-                        cantLetras++;
-                    }
-                    if(esLetra(i)) {
-                        cantLetras++;
-                    }
-                    if(esLetra(n)) {
-                        cantLetras++;
-                    }
-                    if(cantLetras == 1) {
-                        var log = document.getElementById('log');
-                        var resultado = "";
-                        if(esLetra(n)) {
-                            c = parseFloat(c);
-                            d = parseFloat(d);
-                            i = parseFloat(i);
-                            var aproximacion = -1;
-                            var anterior = -1;
-                            var cuotas = 0;
-                            resultado = "<table class='pure-table pure-table-horizontal pure-table-striped'><thead><tr><th>Cantidad de Cuotas</th><th>Valor de la cuota (aprox. en $)</th><th>Monto total del plan (aprox en $)</th></tr><tbody>";
-                            for (var j = 1; j < 12*50; j = j + 1) { //50 años
-                                resultado = resultado + "<tr>";
-                                var operacion = (d * i * Math.pow(1 + i, j) )  / ( Math.pow(1 + i, j) - 1 );
-                                //operacion = (55300 * 0.0135 * Math.pow((1 + 0.0135), j) )  / ( Math.pow((1 + 0.0135), j) - 1 )
-                                if(operacion < c && aproximacion === -1) {
-                                    if(Math.abs(operacion - c) < Math.abs(anterior - c)) {
-                                        aproximacion = operacion;
-                                        cuotas = j;
-                                    }
-                                    else {
-                                        aproximacion = anterior;
-                                        cuotas = j - 1;
-                                    }
-                                }
-                                resultado = resultado + "<td>" + lpad(j,3) +"</td><td class='cell-number'> " + operacion.toFixed(2) + "</td><td class='cell-number'>" + (operacion * j).toFixed(2) + "</td></tr>";
-                                anterior = operacion;
-                            }
-                            resultado = resultado + "</tbody></table>";
-                            resultado = "<p>Plan recomendado: </p><p><strong>Cuotas: " + cuotas +", Valor de la cuota: $ " + aproximacion.toFixed(2) + " - Monto Total del plan: $ " + (cuotas * aproximacion).toFixed(2) + "</strong></p><p>Pasos de la aproximación:</p>" + resultado;
-                            
-                        } else {
-                            if(esLetra(c)) {
-                                //Hay que averiguar la cuota;
-                                n = parseFloat(n);
-                                d = parseFloat(d);
-                                i = parseFloat(i);
-                                var operacion = (d * i * Math.pow(1 + i, n) )  / ( Math.pow(1 + i, n) - 1 );
-                                resultado = "<p><strong>El valor de la cuota es $ " + operacion.toFixed(2) + "</strong></p>";
-                            }
-                        }
-                        log.innerHTML = resultado;
-                    } else {
-                        if(cantLetras === 0) {
-                            info.innerHTML = "<p class='error'>Debe definirse al menos una incognita.<p>";
-                        } else {
-                            info.innerHTML = "<p class='error'>Solo un valor puede definirse como incognita.<p>";
-                        }
-                    }
-                } else {
-                    info.innerHTML = "<p class='error'>Algunos de los parámetros no es válido.<p>";
-                }
-            });
-		})();
-		
-		function getIEVersion() {
-			// Returns the version of Internet Explorer or a -1
-			// (indicating the use of another browser).
-			var rv = -1; // Return value assumes failure.
-			if (navigator.appName == 'Microsoft Internet Explorer') {
-				var ua = navigator.userAgent;
-				var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
-				if (re.exec(ua) != null) {
-					rv = parseFloat( RegExp.$1 );
-				}
-			}
-			return rv;
-		}
-		function esLetra (valor) {
-			var rxEsLetra = new RegExp("^([a-zA-Z]?)$");
-			return rxEsLetra.test(valor);
-		}
-		function esNumero (valor) {
-			var rxEsNumero = new RegExp("^(\\d+(\\.\\d+)?)$");
-			return rxEsNumero.test(valor);
-		}
-		function esValido (valor) {
-			return (esLetra(valor) || esNumero(valor));
-		}
-		function AddEvent(html_element, event_name, event_function) {       
-		   if(html_element.attachEvent) //Internet Explorer
-			  html_element.attachEvent("on" + event_name, function() {event_function.call(html_element);}); 
-		   else if(html_element.addEventListener) //Firefox & company
-			  html_element.addEventListener(event_name, event_function, false); //don't need the 'call' trick because in FF everything already works in the right way          
-		} 
-        function lpad(num, size) {
-            var s = num+"";
-            while (s.length < size) s = "0" + s;
-            return s;
-        }
-	</script>
+    <!--[if IE 8]><script src="js/ie8.js" type="text/javascript"></script><![endif]-->
+	<script src="js/calculadora.js" type="text/javascript"></script>
 </html>

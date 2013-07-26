@@ -1,0 +1,17 @@
+form {
+    max-width:968px;
+    margin:auto!important;
+}
+.pure-form fieldset {
+    border-bottom: 1px solid #e5e5e5;
+}
+.pure-u-bottom {
+    vertical-align:bottom;
+}
+.error {
+    color: red;
+    font-weight:bold;
+}
+.cell-number {
+    text-align:right;
+}
