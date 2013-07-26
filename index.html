@@ -9,6 +9,9 @@
 				max-width:968px;
 				margin:auto!important;
 			}
+            .pure-form fieldset {
+                border-bottom: 1px solid #e5e5e5;
+            }
 			.pure-u-bottom {
 				vertical-align:bottom;
 			}
@@ -16,6 +19,9 @@
 				color: red;
 				font-weight:bold;
 			}
+            .cell-number {
+                text-align:right;
+            }
 		</style>
 	</head>
 	<body>
@@ -41,64 +47,97 @@
 						<label for="i">Tasa de interes</label>
 						<input type="text" id="i" value="0.0135" />
 					</div>
-					
 					<div class="pure-u-1-5 pure-u-bottom">
 						<a id="calcular" href="#" class="pure-button notice pure-button-primary">Calcular</a>
 					</div>
 					<div class="pure-u-1" id="info">
 					</div>
 				</div>
-				
 			</fieldset>
+            <div class="pure-g-r">
+              <div class="pure-u-1">
+                  <div id="log"></div>
+              </div>
+            </div>
 		</form>
-		
-		<iframe id="frame" src="" style="width:100%;height:500px;"></iframe>
 	</body>
 	<script type="text/javascript">
 		(function() {
 			var info = document.getElementById("info");
-			var ie = getIEVersion();
-			if(ie >= 9 || ie === -1) {
-				AddEvent(document.getElementById("calcular"), "click", function () {
-					var c, d, n, i;
-					info.innerHTML = "";
-					c = document.getElementById('c').value;
-					d = document.getElementById('d').value;
-					n = document.getElementById('n').value;
-					i = document.getElementById('i').value;
-					if(esValido(c) && esValido(d) && esValido(n) && esValido(i)) {
-						var cantLetras = 0;
-						if(esLetra(c)) {
-							cantLetras++;
-						}
-						if(esLetra(d)) {
-							cantLetras++;
-						}
-						if(esLetra(i)) {
-							cantLetras++;
-						}
-						if(esLetra(n)) {
-							cantLetras++;
-						}
-						if(cantLetras == 1) {
-							var result = document.getElementById('frame');
-							//https://www.wolframalpha.com/input/?i=150+%3D+%285229.34+*+0.0135+*+%281+%2B+0.0135%29+^+n%29++%2F+%28+%28+%281+%2B+0.0135%29+^+n%29+-+1+%29
-							var go = "https://www.wolframalpha.com/input/?i=" + c +"+%3D+%28" + d + "+*+" + i + "+*+%281+%2B+" + i + "%29+^+" + n +"%29++%2F+%28+%28+%281+%2B+" + i + "%29+^+" + n +"%29+-+1+%29#answers";
-							result.src = go;
-						} else {
-							if(cantLetras === 0) {
-								info.innerHTML = "<p class='error'>Debe definirse al menos una incognita.<p>";
-							} else {
-								info.innerHTML = "<p class='error'>Solo un valor puede definirse como incognita.<p>";
-							}
-						}
-					} else {
-						info.innerHTML = "<p class='error'>Algunos de los par�metros no es v�lido.<p>";
-					}
-				});
-			} else {
-				info.innerHTML = "<p class='error'>Su navegador no es soportado.<p>";
-			}
+            AddEvent(document.getElementById("calcular"), "click", function () {
+                var c, d, n, i;
+                info.innerHTML = "";
+                c = document.getElementById('c').value;
+                d = document.getElementById('d').value;
+                n = document.getElementById('n').value;
+                i = document.getElementById('i').value;
+                if(esValido(c) && esValido(d) && esValido(n) && esValido(i)) {
+                    var cantLetras = 0;
+                    if(esLetra(c)) {
+                        cantLetras++;
+                    }
+                    if(esLetra(d)) {
+                        cantLetras++;
+                    }
+                    if(esLetra(i)) {
+                        cantLetras++;
+                    }
+                    if(esLetra(n)) {
+                        cantLetras++;
+                    }
+                    if(cantLetras == 1) {
+                        var log = document.getElementById('log');
+                        var resultado = "";
+                        if(esLetra(n)) {
+                            c = parseFloat(c);
+                            d = parseFloat(d);
+                            i = parseFloat(i);
+                            var aproximacion = -1;
+                            var anterior = -1;
+                            var cuotas = 0;
+                            resultado = "<table class='pure-table pure-table-horizontal pure-table-striped'><thead><tr><th>Cantidad de Cuotas</th><th>Valor de la cuota (aprox. en $)</th><th>Monto total del plan (aprox en $)</th></tr><tbody>";
+                            for (var j = 1; j < 12*50; j = j + 1) { //50 años
+                                resultado = resultado + "<tr>";
+                                var operacion = (d * i * Math.pow(1 + i, j) )  / ( Math.pow(1 + i, j) - 1 );
+                                //operacion = (55300 * 0.0135 * Math.pow((1 + 0.0135), j) )  / ( Math.pow((1 + 0.0135), j) - 1 )
+                                if(operacion < c && aproximacion === -1) {
+                                    if(Math.abs(operacion - c) < Math.abs(anterior - c)) {
+                                        aproximacion = operacion;
+                                        cuotas = j;
+                                    }
+                                    else {
+                                        aproximacion = anterior;
+                                        cuotas = j - 1;
+                                    }
+                                }
+                                resultado = resultado + "<td>" + lpad(j,3) +"</td><td class='cell-number'> " + operacion.toFixed(2) + "</td><td class='cell-number'>" + (operacion * j).toFixed(2) + "</td></tr>";
+                                anterior = operacion;
+                            }
+                            resultado = resultado + "</tbody></table>";
+                            resultado = "<p>Plan recomendado: </p><p><strong>Cuotas: " + cuotas +", Valor de la cuota: $ " + aproximacion.toFixed(2) + " - Monto Total del plan: $ " + (cuotas * aproximacion).toFixed(2) + "</strong></p><p>Pasos de la aproximación:</p>" + resultado;
+                            
+                        } else {
+                            if(esLetra(c)) {
+                                //Hay que averiguar la cuota;
+                                n = parseFloat(n);
+                                d = parseFloat(d);
+                                i = parseFloat(i);
+                                var operacion = (d * i * Math.pow(1 + i, n) )  / ( Math.pow(1 + i, n) - 1 );
+                                resultado = "<p><strong>El valor de la cuota es $ " + operacion.toFixed(2) + "</strong></p>";
+                            }
+                        }
+                        log.innerHTML = resultado;
+                    } else {
+                        if(cantLetras === 0) {
+                            info.innerHTML = "<p class='error'>Debe definirse al menos una incognita.<p>";
+                        } else {
+                            info.innerHTML = "<p class='error'>Solo un valor puede definirse como incognita.<p>";
+                        }
+                    }
+                } else {
+                    info.innerHTML = "<p class='error'>Algunos de los parámetros no es válido.<p>";
+                }
+            });
 		})();
 		
 		function getIEVersion() {
@@ -131,5 +170,10 @@
 		   else if(html_element.addEventListener) //Firefox & company
 			  html_element.addEventListener(event_name, event_function, false); //don't need the 'call' trick because in FF everything already works in the right way          
 		} 
+        function lpad(num, size) {
+            var s = num+"";
+            while (s.length < size) s = "0" + s;
+            return s;
+        }
 	</script>
 </html>
