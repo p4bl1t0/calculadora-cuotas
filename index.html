@@ -11,37 +11,37 @@
 	</head>
 	<body>
 		<form class="pure-form pure-form-stacked">
+	        <h1>Calculador de cuotas de plan de pago</h1>
+	        <p>Deje alguno de los campos vacío (valor de la cuota o cantidad de cuotas) para que la calculadora estime dicho valor.</p>
     		<fieldset>
-        		<legend>Calculador de cuotas</legend>
 				<div class="pure-g-r">
-					<div class="pure-u-1-5">
-						<label for="d">Deuda total</label>
-						<input type="text" id="d" />
+					<div class="pure-u-1 deuda-entry">
+						<label for="d"><strong>Monto total de la deuda</strong></label>
+						<input type="text" id="d" autofocus />
 					</div>
-					<div class="pure-u-1-5">
-						<label for="c">Valor Cuota</label>
-						<input type="text" id="c" /> 
+					<div class="pure-u-1 pure-u-md-1-4">
+						<label for="c">Valor cuota</label>
+						<input id="c" type="number" min="1" step="1" /> 
 					</div>
 
-					<div class="pure-u-1-5">
+					<div class="pure-u-1 pure-u-md-1-4">
 						<label for="n">Cantidad de cuotas</label>
-						<input type="text" id="n" />
+						<input id="n" type="number" min="1" step="1" />
 					</div>
 
-					<div class="pure-u-1-5">
+					<div class="pure-u-1 pure-u-md-1-4">
 						<label for="i">Tasa de interes</label>
-						<input type="text" id="i" value="0.0135" />
+						<input id="i" type="number" min="0" step="0.0001" value="0.0135" />
 					</div>
-					<div class="pure-u-1-5 pure-u-bottom">
-						<a id="calcular" href="#" class="pure-button notice pure-button-primary">Calcular</a>
+					<div class="pure-u-1 pure-u-md-1-4 pure-u-bottom">
+						<button id="calcular" type="button" class="pure-button notice pure-button-primary">Calcular</button>
 					</div>
-					<div class="pure-u-1" id="info">
-					</div>
+					<div class="pure-u-1" id="info" aria-live="polite"></div>
 				</div>
 			</fieldset>
             <div class="pure-g-r">
               <div class="pure-u-1">
-                  <div id="log"></div>
+                  <div id="log" aria-live="polite"></div>
               </div>
             </div>
 		</form>

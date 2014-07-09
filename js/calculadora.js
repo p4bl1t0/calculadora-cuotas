@@ -18,8 +18,37 @@
         while (s.length < size) s = "0" + s;
         return s;
     }
+    function getQueryString(name) {
+        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS);
+        var results = regex.exec(window.location.search);
+        if (results == null)
+            return "";
+        else
+            return decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
     //Bindings
     document.addEventListener('DOMContentLoaded', function() {
+        var minCuota = getQueryString("mc");
+        var tasa = getQueryString("t");
+        var maxCantCuotas = getQueryString("mcc");
+        if(tasa !== "" && !isNaN(tasa = parseFloat(tasa)) && tasa > 0 && tasa < 1) {
+            var _i = document.getElementById('i');
+            console.log(_i);
+            _i.setAttribute("disabled", "disabled");
+            _i.value = tasa;
+        }
+        if(maxCantCuotas !== "" && !isNaN(maxCantCuotas = parseInt(maxCantCuotas, 10)) && maxCantCuotas > 0) {
+            var _n = document.getElementById('n');
+            _n.setAttribute("max", maxCantCuotas);
+            _n.value = maxCantCuotas;
+        }
+        if(minCuota !== "" && !isNaN(minCuota = parseInt(minCuota, 10)) && minCuota > 0) {
+            var _c = document.getElementById('c');
+            _c.setAttribute("min", minCuota);
+            _c.value = minCuota;
+        }
         document.getElementById("calcular").addEventListener("click", function (event) {
             var c, d, n, i;
             var info = document.getElementById("info");
@@ -72,7 +101,7 @@
                             anterior = operacion;
                         }
                         resultado = resultado + "</tbody></table>";
-                        resultado = "<p>Plan recomendado: </p><p><strong>Cuotas: " + cuotas +", Valor de la cuota: $ " + aproximacion.toFixed(2) + " - Monto Total del plan: $ " + (cuotas * aproximacion).toFixed(2) + "</strong></p><p>Pasos de la aproximación:</p>" + resultado;
+                        resultado = "<h2>Plan recomendado</h2><p><strong>Cuotas: " + cuotas +", Valor de la cuota: $ " + aproximacion.toFixed(2) + " - Monto Total del plan: $ " + (cuotas * aproximacion).toFixed(2) + "</strong></p><p>Pasos de la aproximación:</p>" + resultado;
                         
                     } else {
                         if(esLetra(c)) {
@@ -87,13 +116,13 @@
                     log.innerHTML = resultado;
                 } else {
                     if(cantLetras === 0) {
-                        info.innerHTML = "<p class='error'>Debe definirse al menos una incognita.<p>";
+                        info.innerHTML = "<p class='error'>Debe dejarse al menos un valor vacío.<p>";
                     } else {
-                        info.innerHTML = "<p class='error'>Solo un valor puede definirse como incognita.<p>";
+                        info.innerHTML = "<p class='error'>Solo un valor puede estar en vacío.<p>";
                     }
                 }
             } else {
-                info.innerHTML = "<p class='error'>Algunos de los parámetros no es válido.<p>";
+                info.innerHTML = "<p class='error'>Algunos de los parámetros no tiene un valor válido.<p>";
             }
         });
     });
