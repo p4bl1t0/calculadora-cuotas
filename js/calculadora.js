@@ -117,7 +117,7 @@
                             anterior = operacion;
                         }
                         resultado = resultado + "</tbody></table>";
-                        resultado = "<h2>Plan recomendado</h2><p><strong>Cuotas: " + cuotas + " - Valor de la cuota: $ " + aproximacion.toFixed(2) + " - Monto Total del plan: $ " + ((cuotas - 1) * aproximacion + cuotaInicial).toFixed(2) + "</strong></p><p>Pasos de la aproximación:</p>" + resultado;
+                        resultado = "<h2>Plan recomendado</h2><p><strong>Cuotas: " + cuotas + (!rg3756 ? "" : " - Valor de la cuota inicial: $ " + cuotaInicial.toFixed(2)) + " - Valor de la cuota: $ " + aproximacion.toFixed(2) + " - Monto Total del plan: $ " + ((cuotas - 1) * aproximacion + cuotaInicial).toFixed(2) + "</strong></p><p>Pasos de la aproximación:</p>" + resultado;
                     } else {
                         if(esLetra(c)) {
                             //Hay que averiguar la cuota;
