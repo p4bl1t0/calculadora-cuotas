@@ -34,3 +34,6 @@ form p {
 .deuda-entry {
     margin-bottom: 1em;
 }
+p > em {
+    color: blue;
+}

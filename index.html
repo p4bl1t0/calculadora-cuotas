@@ -10,7 +10,35 @@
 	</head>
 	<body>
 		<form class="pure-form pure-form-stacked">
-	        <h1>Calculador de cuotas de plan de pago</h1>
+	        <h1>Calculador de planes</h1>
+	        <h2>Determinación del pago a cuenta</h2>
+			<fieldset>
+				<div class="pure-g-r">
+					<div class="pure-u-1 pure-u-md-1-4">
+						<label for="m">Deuda consolidada</label>
+						<input id="m" type="number" min="1" step="1" /> 
+					</div>
+
+					<div class="pure-u-1 pure-u-md-1-4">
+						<label for="s">Anticipos</label>
+						<input id="s" type="number" min="1" step="1" />
+					</div>
+
+					<div class="pure-u-1 pure-u-md-1-4">
+						<label for="ppc">% de pago a cuenta según plan</label>
+						<select id="ppc">
+							<option value="5">Plan General (5%)</option>
+							<option value="10">Plan PyME (10%)</option>
+							<option value="15">Plan Otros (15 %)</option>
+						</select>
+					</div>
+					<div class="pure-u-1 pure-u-md-1-4 pure-u-bottom">
+						<button id="calcularPago" type="button" class="pure-button notice pure-button-primary">Calcular pago</button>
+					</div>
+					<div class="pure-u-1" id="infoPagoCuenta" aria-live="polite"></div>
+				</div>
+			</fieldset>
+	        <h2>Determinación de cuotas de plan de pago</h2>
 	        <p>Deje alguno de los campos vacío (valor de la cuota o cantidad de cuotas) para que la calculadora estime dicho valor.</p>
     		<fieldset>
 				<div class="pure-g-r">
@@ -19,6 +47,7 @@
                             <input id="rg3756" type="checkbox"> Usar RG AFIP 3756
                         </label>
 				    </div>
+					<div class="pure-u-1" id="helpCuotas" aria-live="polite"></div>
 					<div class="pure-u-1 deuda-entry">
 						<label for="d"><strong>Monto total de la deuda</strong></label>
 						<input type="text" id="d" autofocus />
@@ -40,6 +69,7 @@
 					<div class="pure-u-1 pure-u-md-1-4 pure-u-bottom">
 						<button id="calcular" type="button" class="pure-button notice pure-button-primary">Calcular</button>
 					</div>
+
 					<div class="pure-u-1" id="info" aria-live="polite"></div>
 				</div>
 			</fieldset>

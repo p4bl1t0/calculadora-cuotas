@@ -49,6 +49,43 @@
             _c.setAttribute("min", minCuota);
             _c.value = minCuota;
         }
+        document.getElementById("calcularPago").addEventListener("click", function (event) {
+            var m, s, ppc, a, p;
+            var info = document.getElementById("infoPagoCuenta");
+            document.getElementById('d').value = "";
+            event.preventDefault();
+            info.innerHTML = "";
+            m = document.getElementById('m').value.replace(",", ".");
+            s = document.getElementById('s').value.replace(",", ".");
+            ppc = document.getElementById('ppc').value.replace(",", ".");
+            m = parseFloat(m);
+            s = parseFloat(s);
+            ppc = parseFloat(ppc);
+
+            if(!isNaN(m) && !isNaN(s) && !isNaN(ppc)) {
+                a = (m - s) * (ppc / 100);
+                p = (a + s);
+                if(a >= 500) {
+                    document.getElementById('d').value = (m - s - p).toFixed(2);
+                    info.innerHTML = "<p><strong>El valor del pago a cuenta es: " + a.toFixed(2) +"</strong></p>";
+                    info.innerHTML += "<p><strong>Anticipos más pago a cuenta: " + p.toFixed(2) +"</strong></p>";
+                    info.innerHTML += "<p><strong>El monto de deuda a financiar es: " + (m - p).toFixed(2) +"</strong></p>";
+                    if(ppc === 5) {
+                        document.getElementById('helpCuotas').innerHTML = "<p><em>Valor de cuota mínimo $ 500 y cantidad máxima 60 cuotas.</em></p>";
+                        document.getElementById('n').value = "60";
+                    } else {
+                        document.getElementById('helpCuotas').innerHTML = "<p><em>Valor de cuota mínimo $ 500 y cantidad máxima 90 cuotas.</em></p>";
+                        document.getElementById('n').value = "90";
+                    }
+                } else {
+                    info.innerHTML = "<p class='error'><strong>El monto del pago a cuenta debe superar los $ 500.</strong></p>";
+                    info.innerHTML += "<p><strong>El valor del pago a cuenta es: " + a.toFixed(2) +"</strong></p>";
+                    info.innerHTML += "<p><strong>El monto de deuda a financiar es: " + (m  - p).toFixed(2) +"</strong></p>";
+                }
+            } else {
+                info.innerHTML = "<p class='error'><strong>Los valores ingresados en los campos no es válida.</strong></p>";
+            }
+        });
         document.getElementById("calcular").addEventListener("click", function (event) {
             var c, d, n, i, rg3756;
             var info = document.getElementById("info");
